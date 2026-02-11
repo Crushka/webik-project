@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Oswald:wght@200..700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    width: 100%;
+    height: 100px;
+    border-bottom: 4px solid silver;
+    background: #474b52;
+    text-align: right;
+    line-height: 100px;
+    position: relative;
+    float: left;
+    z-index: 0;
+}
+
+#header_text {
+    color: #ffffff;
+    margin-right: 20px;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 35px;
+    -webkit-text-stroke: 1.2px black;
+}
+
+#aside {
+    width: 20%;
+    height: 100%;
+    background: #474b52;
+    padding: 30% 20px;
+    border-right: 4px solid silver;
+    float: left;
+    position: fixed;
+    z-index: 1;
+    text-align: center;
+}
+
+#aside_block {
+    position: relative;
+    left: 20px;
+    top: 15px;
+    z-index: 2;
+
+    background-color: white;
+    width: 20%;
+    height: 70px;
+    border-radius: 20px;
+
+    color: white;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 35px;
+    -webkit-text-stroke: 1.2px black;
+    text-align: center;
+}
+
+#aside_text {
+    position: relative;
+    bottom: 98px;
+}

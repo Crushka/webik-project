@@ -7,11 +7,11 @@
 
 #header {
     width: 100%;
-    height: 100px;
+    height: 80px;
     border-bottom: 4px solid silver;
     background: #474b52;
     text-align: right;
-    line-height: 100px;
+    line-height: 80px;
     position: relative;
     float: left;
     z-index: 0;
@@ -43,25 +43,39 @@
 #aside_block {
     position: relative;
     left: 20px;
-    top: 15px;
+    top: 10px;
     z-index: 2;
 
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     width: 20%;
-    height: 70px;
+    height: 40px;
     border-radius: 20px;
+    border: 2px solid silver;
 
     color: white;
     font-family: "Oswald", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 35px;
+    font-size: 30px;
     -webkit-text-stroke: 1.2px black;
     text-align: center;
 }
 
 #aside_text {
     position: relative;
-    bottom: 98px;
+    bottom: 87px;
+}
+
+.default_code_block {
+    position: relative;
+    left: 20px;
+    top: 40px;
+    z-index: 3;
+
+    background-color: white;
+    min-width: 20%; max-width: 20%;
+    min-height: 80px; max-height: 80px;
+    border-radius: 10px 60px 60px 10px;
+    border: 2px solid silver;
 }

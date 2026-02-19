@@ -57,8 +57,9 @@ body {
     justify-content: center;
     align-items: center;
 
-    position: fixed;
-    margin-top: 20px;
+    position: relative;
+    margin-top: 10px;
+    bottom: 75px;
     z-index: 2;
 }
 
@@ -69,7 +70,5 @@ body {
 
 .blocks {
     width: 18%;
-    margin-top: 20px;
-    margin-left: 1%;
     z-index: 2;
 }

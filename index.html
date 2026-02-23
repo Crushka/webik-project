@@ -9,7 +9,8 @@
     </head>
     <body>
         <div id="header">
-            <button onclick="main()">Run Program</button>
+            <button class="button" id="run-button" onclick="main()">Run Program</button>
+            <button class="button" id="del-button" onclick="deleteAllBlocks()">Delete all</button>
             <span id="header_text">CodeBlock Pro</span>
         </div>
         <div id="aside"></div>
@@ -19,6 +20,14 @@
         <br>
         <img class="blocks" id="cy-co_code_block" src="pictures/cycle&condition_code_block.svg" alt="cy&co_cb"><br>
         <img class="blocks" id="the-end_code_block" src="pictures/the-end_code_block.svg" alt="t-e_cb">
+
+        <div id="console-wrapper">
+            <div id="console-tab" onclick="toggleConsole()">
+                <div id="console-chevron"></div>
+            </div>
+            <div id="console-body"></div>
+        </div>
+
         <script src="JS/interpretator.js"></script>
         <script src="JS/script.js"></script>
     </body>

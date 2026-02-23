@@ -10,10 +10,79 @@ const BLOCK_INFO = {
 const SNAP_DISTANCE_Y = 60;
 const SNAP_DISTANCE_X = 80;
 
-// ─── Вспомогательные функции ──────────────────────────────────────────────────
+let canvasOffsetX = 0;
+let canvasOffsetY = 0;
+let isPanning     = false;
+let panStartX     = 0;
+let panStartY     = 0;
+let spaceHeld     = false;
 
 const getSidebarWidth = () => document.getElementById('aside').offsetWidth;
 const getHeaderHeight = () => document.getElementById('header').offsetHeight;
+
+let canvas;
+
+function applyCanvasTransform() {
+    canvas.style.transform = `translate(${canvasOffsetX}px, ${canvasOffsetY}px)`;
+}
+
+function toCanvasSpace(vx, vy) {
+    return { x: vx - canvasOffsetX, y: vy - canvasOffsetY };
+}
+
+function startPan(e) {
+    isPanning = true;
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    document.body.style.cursor = 'grabbing';
+    e.preventDefault();
+}
+
+function onPanMove(e) {
+    if (!isPanning) return;
+    const dx = e.clientX - panStartX;
+    const dy = e.clientY - panStartY;
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    canvasOffsetX += dx;
+    canvasOffsetY += dy;
+    applyCanvasTransform();
+}
+
+function stopPan() {
+    if (!isPanning) return;
+    isPanning = false;
+    document.body.style.cursor = spaceHeld ? 'grab' : '';
+}
+
+window.addEventListener('mousedown', e => {
+    if (e.button === 1) { startPan(e); }
+});
+window.addEventListener('mousemove', onPanMove);
+window.addEventListener('mouseup', e => {
+    if (e.button === 1) stopPan();
+});
+
+window.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !spaceHeld) {
+        spaceHeld = true;
+        document.body.style.cursor = 'grab';
+        e.preventDefault();
+    }
+});
+window.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+        spaceHeld = false;
+        stopPan();
+        document.body.style.cursor = '';
+    }
+});
+window.addEventListener('mousedown', e => {
+    if (e.button === 0 && spaceHeld && !draggedElement) { startPan(e); }
+});
+window.addEventListener('mouseup', e => {
+    if (e.button === 0) stopPan();
+});
 
 function getBlockType(el) {
     const id = el.id || el.getAttribute('data-original-id') || '';
@@ -165,6 +234,8 @@ originalBlocks.forEach(block => {
 });
 
 function startDragFromSidebar(e) {
+    if (spaceHeld) return; 
+
     const original = e.currentTarget;
     const rect = original.getBoundingClientRect();
 
@@ -193,11 +264,19 @@ function startDragFromSidebar(e) {
 }
 
 function startDragExistingBlock(e) {
+    if (spaceHeld) return;
+
     draggedElement = e.currentTarget;
     const rect = draggedElement.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
     isOriginalBlock = false;
+
+    const canvasLeft = parseFloat(draggedElement.style.left) || 0;
+    const canvasTop  = parseFloat(draggedElement.style.top)  || 0;
+    draggedElement.style.left = (canvasLeft + canvasOffsetX) + 'px';
+    draggedElement.style.top  = (canvasTop  + canvasOffsetY) + 'px';
+    document.body.appendChild(draggedElement);
 
     draggedElement.style.cursor  = 'grabbing';
     draggedElement.style.opacity = '0.7';
@@ -233,17 +312,29 @@ function stopDrag(e) {
 
     if (!draggedElement) return;
 
-    const inSidebar = e.clientX <= getSidebarWidth();
-    const inHeader  = e.clientY <= getHeaderHeight();
+    const sidebarWidth = getSidebarWidth();
+    const headerHeight = getHeaderHeight();
+    const inSidebar = e.clientX <= sidebarWidth;
+    const inHeader  = e.clientY <= headerHeight;
+
+    function adoptIntoCanvas(el) {
+        const viewLeft = parseFloat(el.style.left) || 0;
+        const viewTop  = parseFloat(el.style.top)  || 0;
+        el.style.left = (viewLeft - canvasOffsetX) + 'px';
+        el.style.top  = (viewTop  - canvasOffsetY) + 'px';
+        canvas.appendChild(el);
+    }
 
     if (isOriginalBlock) {
         if (!inSidebar && !inHeader) {
-            draggedElement.style.opacity = '1';
-            draggedElement.style.cursor  = 'move';
-            draggedElement.style.zIndex  = '2';
+            draggedElement.style.opacity       = '1';
+            draggedElement.style.cursor        = 'move';
+            draggedElement.style.zIndex        = '2';
+            draggedElement.style.pointerEvents = 'auto';
             draggedElement.classList.remove('dragging-clone');
             draggedElement.classList.add('dropped-block');
 
+            adoptIntoCanvas(draggedElement);
             ensureLink(draggedElement);
 
             const snap = findSnapTarget(draggedElement);
@@ -272,9 +363,12 @@ function stopDrag(e) {
             droppedBlocks = droppedBlocks.filter(b => b.element !== draggedElement);
             draggedElement.remove();
         } else {
-            draggedElement.style.opacity = '1';
-            draggedElement.style.cursor  = 'move';
-            draggedElement.style.zIndex  = '2';
+            draggedElement.style.opacity       = '1';
+            draggedElement.style.cursor        = 'move';
+            draggedElement.style.zIndex        = '2';
+            draggedElement.style.pointerEvents = 'auto';
+
+            adoptIntoCanvas(draggedElement);
 
             const snap = findSnapTarget(draggedElement);
             if (snap.target) snapBlocks(draggedElement, snap.target, snap.snapType);
@@ -359,7 +453,30 @@ function repositionDroppedBlocks() {
     });
 }
 
-window.addEventListener('load',   initializeBlockPositions);
+function deleteAllBlocks() {
+    droppedBlocks.forEach(({ element: el }) => {
+        if (el && el.parentNode) el.remove();
+    });
+    droppedBlocks = [];
+    blockLinks.clear();
+}
+
+window.addEventListener('load', () => {
+    canvas = document.createElement('div');
+    canvas.id = 'canvas';
+    canvas.style.cssText = `
+        position: fixed;
+        top: 0; left: 0;
+        width: 0; height: 0;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 1;
+    `;
+    document.body.appendChild(canvas);
+
+    initializeBlockPositions();
+});
+
 window.addEventListener('resize', () => {
     initializeBlockPositions();
     repositionDroppedBlocks();

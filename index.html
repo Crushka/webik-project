@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="authors" content="Yana Podskrebysheva & Egor Slyuta">
-        <link rel="stylesheet" href="CSS\main.css">
+        <link rel="stylesheet" href="CSS/main.css">
         <title>CodeBlock Pro</title>
     </head>
     <body>
@@ -13,13 +13,67 @@
             <button class="button" id="del-button" onclick="deleteAllBlocks()">Delete all</button>
             <span id="header_text">CodeBlock Pro</span>
         </div>
-        <div id="aside"></div>
-        <div id="aside_block"><span id="aside_text">Blocks</span></div>
 
-        <img class="blocks" id="default_code_block" src="pictures/default_code_block.svg" alt="def_cb">
-        <br>
-        <img class="blocks" id="cy-co_code_block" src="pictures/cycle&condition_code_block.svg" alt="cy&co_cb"><br>
-        <img class="blocks" id="the-end_code_block" src="pictures/the-end_code_block.svg" alt="t-e_cb">
+        <div id="aside">
+            <div id="aside_label">Blocks</div>
+            <div id="sidebar-scroll">
+
+                <div class="block-wrapper" id="begin_code_block" data-block-type="begin">
+                    <img class="block-img" src="pictures/begin_code_block.svg" alt="Begin">
+                    <span class="block-overlay simple-label begin-label">Begin</span>
+                </div>
+
+                <div class="block-wrapper" id="set_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set">
+                    <span  class="block-overlay set-label">set</span>
+                    <input class="block-overlay set-var"   type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay set-eq">:=</span>
+                    <input class="block-overlay set-val"   type="text" placeholder="value"    data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="get_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get">
+                    <span  class="block-overlay get-label">get</span>
+                    <input class="block-overlay get-var" type="text" placeholder="variable" data-field="varName">
+                </div>
+
+                <div class="block-wrapper" id="if_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="If">
+                    <span  class="block-overlay cyco-label">if</span>
+                    <input class="block-overlay cyco-cond" type="text" placeholder="condition" data-field="condition">
+                </div>
+
+                <div class="block-wrapper" id="else_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="Else">
+                    <span class="block-overlay cyco-label">else</span>
+                </div>
+
+                <div class="block-wrapper" id="while_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="While">
+                    <span  class="block-overlay cyco-label">while</span>
+                    <input class="block-overlay cyco-cond" type="text" placeholder="condition" data-field="condition">
+                </div>
+
+                <div class="block-wrapper" id="for_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="For">
+                    <span  class="block-overlay cyco-label">for</span>
+                    <input class="block-overlay for-var"  type="text" placeholder="var" data-field="forVar">
+                    <input class="block-overlay for-from" type="text" placeholder="0"   data-field="from">
+                    <input class="block-overlay for-to"   type="text" placeholder="n"   data-field="to">
+                </div>
+
+                <div class="block-wrapper" id="cycleend_code_block" data-block-type="cycleend">
+                    <img class="block-img" src="pictures/cy-co_end_code_block.svg" alt="Cycle End">
+                    <span class="block-overlay simple-label cycleend-label">Cycle End</span>
+                </div>
+
+                <div class="block-wrapper" id="end_code_block" data-block-type="end">
+                    <img class="block-img" src="pictures/end_code_block.svg" alt="End">
+                    <span class="block-overlay simple-label end-label">End</span>
+                </div>
+
+            </div>
+        </div>
 
         <div id="console-wrapper">
             <div id="console-tab" onclick="toggleConsole()">

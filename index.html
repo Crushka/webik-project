@@ -8,7 +8,10 @@
         <title>CodeBlock Pro</title>
     </head>
     <body>
+        <div id="work-area"></div>
         <div id="header">
+            <button class="button" id="save-button" onclick="saveBlocks()">Save</button>
+            <button class="button" id="upload-button" onclick="openFileDialog()">Upload</button>
             <button class="button" id="run-button" onclick="main()">Run Program</button>
             <button class="button" id="del-button" onclick="deleteAllBlocks()">Delete all</button>
             <span id="header_text">CodeBlock Pro</span>
@@ -62,9 +65,99 @@
                     <input class="block-overlay for-to"   type="text" placeholder="n"   data-field="to">
                 </div>
 
+                <div class="block-wrapper" id="createarr_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Create array">
+                    <span  class="block-overlay createarr-label">Create array</span>
+                    <input class="block-overlay createarr-var"  type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay createarr-size-label">size</span>
+                    <input class="block-overlay createarr-size" type="text" placeholder="n"        data-field="size">
+                </div>
+
+                <div class="block-wrapper" id="arrlen_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get array length">
+                    <span  class="block-overlay arrlen-label">Get array length</span>
+                    <input class="block-overlay arrlen-var"   type="text" placeholder="var"   data-field="varName">
+                    <span  class="block-overlay arrlen-eq">=</span>
+                    <span  class="block-overlay arrlen-len">length</span>
+                    <input class="block-overlay arrlen-arr"   type="text" placeholder="array" data-field="arrName">
+                </div>
+
+                <div class="block-wrapper" id="swap_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Swap">
+                    <span  class="block-overlay swap-label">Swap</span>
+                    <input class="block-overlay swap-arr"  type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay swap-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay swap-idx2" type="text" placeholder="j"     data-field="index2">
+                </div>
+
+                <div class="block-wrapper" id="arrget_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get array value">
+                    <span  class="block-overlay arrget-label">Get array value</span>
+                    <input class="block-overlay arrget-var" type="text" placeholder="var"   data-field="varName">
+                    <span  class="block-overlay arrget-eq">=</span>
+                    <input class="block-overlay arrget-arr" type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay arrget-idx" type="text" placeholder="i"     data-field="index">
+                </div>
+
+                <div class="block-wrapper" id="arrset_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set array value">
+                    <span  class="block-overlay arrset-label">Set array value</span>
+                    <input class="block-overlay arrset-arr" type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay arrset-idx" type="text" placeholder="i"     data-field="index">
+                    <span  class="block-overlay arrset-eq">=</span>
+                    <input class="block-overlay arrset-val" type="text" placeholder="value" data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="creatematrix_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Create matrix">
+                    <span  class="block-overlay creatematrix-label">Create matrix</span>
+                    <input class="block-overlay creatematrix-var"  type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay creatematrix-n-label">N</span>
+                    <input class="block-overlay creatematrix-n" type="text" placeholder="n"        data-field="rows">
+                    <span  class="block-overlay creatematrix-m-label">M</span>
+                    <input class="block-overlay creatematrix-m" type="text" placeholder="m"        data-field="cols">
+                </div>
+
+                <div class="block-wrapper" id="matget_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get matrix value">
+                    <span  class="block-overlay matget-label">Get matrix value</span>
+                    <input class="block-overlay matget-var" type="text" placeholder="var"    data-field="varName">
+                    <span  class="block-overlay matget-eq">=</span>
+                    <input class="block-overlay matget-mat" type="text" placeholder="matrix" data-field="matName">
+                    <input class="block-overlay matget-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay matget-idx2" type="text" placeholder="j"     data-field="index2">
+                </div>
+
+                <div class="block-wrapper" id="matset_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set matrix value">
+                    <span  class="block-overlay matset-label">Set matrix value</span>
+                    <input class="block-overlay matset-mat" type="text" placeholder="matrix" data-field="matName">
+                    <input class="block-overlay matset-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay matset-idx2" type="text" placeholder="j"     data-field="index2">
+                    <span  class="block-overlay matset-eq">=</span>
+                    <input class="block-overlay matset-val" type="text" placeholder="value"  data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="matlen_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get matrix length">
+                    <span  class="block-overlay matlen-label">Get matrix size</span>
+                    <input class="block-overlay matlen-var"   type="text" placeholder="var"    data-field="varName">
+                    <span  class="block-overlay matlen-eq">=</span>
+                    <input class="block-overlay matlen-mat"   type="text" placeholder="matrix" data-field="matName">
+                    <select class="block-overlay matlen-select" data-field="dimension">
+                        <option value="rows">rows (N)</option>
+                        <option value="cols">cols (M)</option>
+                    </select>
+                </div>
+
                 <div class="block-wrapper" id="cycleend_code_block" data-block-type="cycleend">
                     <img class="block-img" src="pictures/cy-co_end_code_block.svg" alt="Cycle End">
                     <span class="block-overlay simple-label cycleend-label">Cycle End</span>
+                </div>
+
+                <div class="block-wrapper" id="condend_code_block" data-block-type="cycleend">
+                    <img class="block-img" src="pictures/cy-co_end_code_block.svg" alt="Condition End">
+                    <span class="block-overlay simple-label cycleend-label">Condition End</span>
                 </div>
 
                 <div class="block-wrapper" id="end_code_block" data-block-type="end">
@@ -82,7 +175,13 @@
             <div id="console-body"></div>
         </div>
 
+        <div id="zoom-controls">
+            <button id="zoom-reset" onclick="resetZoom()">Reset 100%</button>
+            <span id="zoom-percentage">100%</span>
+        </div>
+
         <script src="JS/interpretator.js"></script>
         <script src="JS/script.js"></script>
+        <script src="JS/save-load.js"></script>
     </body>
 </html>

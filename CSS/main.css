@@ -117,6 +117,20 @@ body {
 #del-button:hover  { box-shadow: 0 4px 0 #7d2e2e; }
 #del-button:active { box-shadow: 0 0px 0 #7d2e2e; }
 
+#save-button {
+    background-color: #2196F3;
+    box-shadow: 0 6px 0 #1565C0;
+}
+#save-button:hover  { box-shadow: 0 4px 0 #1565C0; }
+#save-button:active { box-shadow: 0 0px 0 #1565C0; }
+
+#upload-button {
+    background-color: #FF9800;
+    box-shadow: 0 6px 0 #E65100;
+}
+#upload-button:hover  { box-shadow: 0 4px 0 #E65100; }
+#upload-button:active { box-shadow: 0 0px 0 #E65100; }
+
 #run-button {
     background-color: #4CAF50;
     box-shadow: 0 6px 0 #2e7d32;
@@ -359,3 +373,338 @@ span.block-overlay {
 .console-line .console-prefix { color: #4CAF50; margin-right: 4px; }
 .console-line.console-error   { color: #e06c75; }
 .console-line.console-error .console-prefix { color: #e06c75; }
+
+#work-area {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 80px);
+    z-index: 0;
+    pointer-events: none;
+    background-color: #2b2e35;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.createarr-label {
+    left:   38%;   top:    16.9%;
+    width:  52%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.createarr-var {
+    left:   3%;    top:    46.6%;
+    width:  52%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.createarr-size-label {
+    left:   57%;   top:    46.6%;
+    width:  14%;   height: 15.5%;
+    font-size: clamp(6px, 0.78vw, 10px);
+    justify-content: center;
+    font-weight: 700;
+    color: #222;
+}
+.createarr-size {
+    left:   72%;   top:    46.6%;
+    width:  22%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+
+.arrlen-label {
+    left:   38%;   top:    16.9%;
+    width:  52%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.arrlen-var {
+    left:   3%;    top:    46.6%;
+    width:  20%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.arrlen-eq {
+    left:   24%;   top:    46.6%;
+    width:  6%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.arrlen-len {
+    left:   31%;   top:    46.6%;
+    width:  22%;   height: 15.5%;
+    font-size: clamp(6px, 0.78vw, 10px);
+    justify-content: center;
+    font-weight: 700;
+    color: #222;
+}
+.arrlen-arr {
+    left:   54%;   top:    46.6%;
+    width:  40%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+
+.swap-label {
+    left:   57.9%; top:    16.9%;
+    width:  30%;   height: 15.5%;
+    font-size: clamp(8px, 1vw, 13px);
+}
+.swap-arr {
+    left:   3%;    top:    46.6%;
+    width:  38%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.swap-idx1 {
+    left:   43%;   top:    46.6%;
+    width:  24%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.swap-idx2 {
+    left:   69%;   top:    46.6%;
+    width:  25%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+
+.arrget-label {
+    left:   33%;   top:    16.9%;
+    width:  57%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.arrget-var {
+    left:   3%;    top:    46.6%;
+    width:  20%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.arrget-eq {
+    left:   24%;   top:    46.6%;
+    width:  6%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.arrget-arr {
+    left:   31%;   top:    46.6%;
+    width:  37%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.arrget-idx {
+    left:   70%;   top:    46.6%;
+    width:  24%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+
+.arrset-label {
+    left:   33%;   top:    16.9%;
+    width:  57%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.arrset-arr {
+    left:   3%;    top:    46.6%;
+    width:  33%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.arrset-idx {
+    left:   38%;   top:    46.6%;
+    width:  16%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.arrset-eq {
+    left:   56%;   top:    46.6%;
+    width:  6%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.arrset-val {
+    left:   63%;   top:    46.6%;
+    width:  31%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+
+.creatematrix-label {
+    left:   38%;   top:    16.9%;
+    width:  52%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.creatematrix-var {
+    left:   3%;    top:    46.6%;
+    width:  32%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.creatematrix-n-label {
+    left:   37%;   top:    46.6%;
+    width:  6%;    height: 15.5%;
+    font-size: clamp(6px, 0.78vw, 10px);
+    justify-content: center;
+    font-weight: 700;
+    color: #222;
+}
+.creatematrix-n {
+    left:   44%;   top:    46.6%;
+    width:  11%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.creatematrix-m-label {
+    left:   57%;   top:    46.6%;
+    width:  6%;    height: 15.5%;
+    font-size: clamp(6px, 0.78vw, 10px);
+    justify-content: center;
+    font-weight: 700;
+    color: #222;
+}
+.creatematrix-m {
+    left:   64%;   top:    46.6%;
+    width:  31%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+
+.matget-label {
+    left:   28%;   top:    16.9%;
+    width:  62%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.matget-var {
+    left:   3%;    top:    46.6%;
+    width:  16%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.matget-eq {
+    left:   20%;   top:    46.6%;
+    width:  5%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.matget-mat {
+    left:   26%;   top:    46.6%;
+    width:  28%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.matget-idx1 {
+    left:   56%;   top:    46.6%;
+    width:  15%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.matget-idx2 {
+    left:   73%;   top:    46.6%;
+    width:  21%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+
+.matset-label {
+    left:   28%;   top:    16.9%;
+    width:  62%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.matset-mat {
+    left:   3%;    top:    46.6%;
+    width:  26%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.matset-idx1 {
+    left:   31%;   top:    46.6%;
+    width:  13%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.matset-idx2 {
+    left:   46%;   top:    46.6%;
+    width:  13%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    text-align: center;
+}
+.matset-eq {
+    left:   61%;   top:    46.6%;
+    width:  5%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.matset-val {
+    left:   67%;   top:    46.6%;
+    width:  27%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+
+.matlen-label {
+    left:   38%;   top:    16.9%;
+    width:  52%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+}
+.matlen-var {
+    left:   3%;    top:    46.6%;
+    width:  16%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.matlen-eq {
+    left:   20%;   top:    46.6%;
+    width:  5%;    height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+    justify-content: center;
+}
+.matlen-mat {
+    left:   26%;   top:    46.6%;
+    width:  28%;   height: 15.5%;
+    font-size: clamp(7px, 0.85vw, 11px);
+}
+.matlen-select {
+    left:   56%;   top:    46.6%;
+    width:  38%;   height: 15.5%;
+    font-size: clamp(6px, 0.75vw, 10px);
+    padding: 2px 4px;
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid #222;
+    border-radius: 3px;
+    color: #222;
+    cursor: pointer;
+}
+
+#zoom-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #474b52;
+    border: 2px solid silver;
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 99;
+    font-size: 14px;
+    color: #c8c8c8;
+    user-select: none;
+}
+
+#zoom-reset {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 0 #2e7d32;
+}
+
+#zoom-reset:hover {
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #2e7d32;
+}
+
+#zoom-reset:active {
+    transform: translateY(3px);
+    box-shadow: 0 0px 0 #2e7d32;
+}
+
+#zoom-percentage {
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+}

@@ -14,9 +14,11 @@ const SNAP_DIST_X = 70;
 let canvas;
 let canvasOffsetX = 0;
 let canvasOffsetY = 0;
+let zoomLevel = 1.0;
 
 function applyCanvasTransform() {
-    canvas.style.transform = `translate(${canvasOffsetX}px, ${canvasOffsetY}px)`;
+    canvas.style.transform = `translate(${canvasOffsetX}px, ${canvasOffsetY}px) scale(${zoomLevel})`;
+    canvas.style.transformOrigin = '0 0';
 }
 
 let isPanning = false, panStartX = 0, panStartY = 0;
@@ -83,9 +85,9 @@ function getConnectors(el) {
     const s = r.width / VIEWBOX_WIDTH;
     return {
         topX: r.left + info.topX * s,
-        topY: r.top  + info.topY * s,
+        topY: r.top + info.topY * s,
         botX: r.left + info.botX * s,
-        botY: r.top  + info.botY * s,
+        botY: r.top + info.botY * s,
     };
 }
 
@@ -168,10 +170,10 @@ function snapBlocks(dEl, tEl, snapType) {
     const head = chainHead(dEl);
     const chain = chainFrom(head);
     const dx = newLeft - (parseFloat(dEl.style.left) || 0);
-    const dy = newTop  - (parseFloat(dEl.style.top)  || 0);
+    const dy = newTop - (parseFloat(dEl.style.top)  || 0);
     chain.forEach(el => {
         el.style.left = (parseFloat(el.style.left) + dx) + 'px';
-        el.style.top  = (parseFloat(el.style.top)  + dy) + 'px';
+        el.style.top = (parseFloat(el.style.top)  + dy) + 'px';
     });
 
     ensureLink(dEl); ensureLink(tEl);
@@ -185,7 +187,7 @@ function snapBlocks(dEl, tEl, snapType) {
 }
 
 let droppedBlocks = [];
-let draggedEl     = null;
+let draggedEl = null;
 let dragOffX = 0, dragOffY = 0;
 let draggingFromSidebar = false;
 
@@ -201,6 +203,8 @@ function onSidebarMousedown(e) {
     if (spaceHeld) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
+    if (zoomLevel !== 1.0) return;
+
     const original = e.currentTarget;
     const rect = original.getBoundingClientRect();
 
@@ -210,11 +214,11 @@ function onSidebarMousedown(e) {
 
     const clone = original.cloneNode(true);
     clone.style.position = 'fixed';
-    clone.style.left   = rect.left + 'px';
-    clone.style.top    = rect.top  + 'px';
-    clone.style.width  = rect.width + 'px';
+    clone.style.left = rect.left + 'px';
+    clone.style.top = rect.top + 'px';
+    clone.style.width = rect.width + 'px';
     clone.style.opacity = '0.75';
-    clone.style.zIndex  = '1000';
+    clone.style.zIndex = '1000';
     clone.classList.add('dragging-clone');
     document.body.appendChild(clone);
     draggedEl = clone;
@@ -229,6 +233,8 @@ function onCanvasMousedown(e) {
     if (spaceHeld) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
+    if (zoomLevel !== 1.0) return;
+
     draggedEl = e.currentTarget;
     draggingFromSidebar = false;
 
@@ -240,7 +246,7 @@ function onCanvasMousedown(e) {
     const ct = parseFloat(draggedEl.style.top)  || 0;
     draggedEl.style.position = 'fixed';
     draggedEl.style.left = (cl + canvasOffsetX) + 'px';
-    draggedEl.style.top  = (ct + canvasOffsetY) + 'px';
+    draggedEl.style.top = (ct + canvasOffsetY) + 'px';
     draggedEl.style.zIndex = '1000';
     draggedEl.style.opacity = '0.75';
     document.body.appendChild(draggedEl);
@@ -262,7 +268,7 @@ function onDragMove(e) {
     const dy = ny - parseFloat(draggedEl.style.top);
     chain.forEach(el => {
         el.style.left = (parseFloat(el.style.left) + dx) + 'px';
-        el.style.top  = (parseFloat(el.style.top)  + dy) + 'px';
+        el.style.top = (parseFloat(el.style.top)  + dy) + 'px';
     });
 }
 
@@ -274,22 +280,36 @@ function onDragEnd(e) {
     const sw = sidebarWidth();
     const hh = headerHeight();
     const inSidebar = e.clientX <= sw;
-    const inHeader  = e.clientY <= hh;
+    const inHeader = e.clientY <= hh;
 
     function adoptOnCanvas(el) {
         const vl = parseFloat(el.style.left) || 0;
         const vt = parseFloat(el.style.top)  || 0;
         el.style.position = 'absolute';
         el.style.left = (vl - canvasOffsetX) + 'px';
-        el.style.top  = (vt - canvasOffsetY) + 'px';
+        el.style.top = (vt - canvasOffsetY) + 'px';
         el.style.width = '18vw';
         canvas.appendChild(el);
     }
 
     if (draggingFromSidebar) {
         if (!inSidebar && !inHeader) {
+            const newKind = draggedEl.querySelector('img')?.alt || '';
+            if (newKind === 'Begin' && droppedBlocks.some(b => blockKind(b) === 'Begin')) {
+                draggedEl.remove();
+                draggedEl = null;
+                draggingFromSidebar = false;
+                return;
+            }
+            if (newKind === 'End' && droppedBlocks.some(b => blockKind(b) === 'End')) {
+                draggedEl.remove();
+                draggedEl = null;
+                draggingFromSidebar = false;
+                return;
+            }
+
             draggedEl.style.opacity = '1';
-            draggedEl.style.zIndex  = '2';
+            draggedEl.style.zIndex = '2';
             draggedEl.classList.remove('dragging-clone');
             draggedEl.classList.add('dropped-block');
             adoptOnCanvas(draggedEl);
@@ -335,6 +355,67 @@ function deleteAllBlocks() {
     links.clear();
 }
 
+function reflowChains() {
+    const heads = droppedBlocks.filter(b => !links.get(b)?.prev);
+    heads.forEach(head => {
+        let cur = head;
+        let nxt = links.get(cur)?.next || null;
+        while (nxt) {
+            const di = getInfo(cur);
+            const ti = getInfo(nxt);
+            const ds = getScale(cur);
+            const ts = getScale(nxt);
+            const curLeft = parseFloat(cur.style.left) || 0;
+            const curTop = parseFloat(cur.style.top)  || 0;
+
+            const curBotX = curLeft + di.botX * ds;
+            const curBotY = curTop  + di.botY * ds;
+
+            const newLeft = curBotX - ti.topX * ts;
+            const newTop = curBotY - ti.topY * ts;
+
+            nxt.style.left = newLeft + 'px';
+            nxt.style.top = newTop  + 'px';
+
+            cur = nxt;
+            nxt = links.get(cur)?.next || null;
+        }
+    });
+}
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(reflowChains, 50);
+});
+
+function resetZoom() {
+    zoomLevel = 1.0;
+    applyCanvasTransform();
+    updateZoomDisplay();
+}
+
+function updateZoomDisplay() {
+    const percentage = Math.round(zoomLevel * 100);
+    const zoomPercentageEl = document.getElementById('zoom-percentage');
+    if (zoomPercentageEl) {
+        zoomPercentageEl.textContent = percentage + '%';
+    }
+}
+
+window.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey) return;
+    
+    e.preventDefault();
+    
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    zoomLevel *= delta;
+    zoomLevel = Math.max(0.3, Math.min(3.0, zoomLevel));
+    
+    applyCanvasTransform();
+    updateZoomDisplay();
+}, { passive: false });
+
 window.addEventListener('load', () => {
     canvas = document.createElement('div');
     canvas.id = 'canvas';
@@ -346,4 +427,6 @@ window.addEventListener('load', () => {
         z-index: 1;
     `;
     document.body.appendChild(canvas);
+
+    updateZoomDisplay();
 });

@@ -4,12 +4,197 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="authors" content="Yana Podskrebysheva & Egor Slyuta">
-        <link rel="stylesheet" href="CSS\main.css">
+        <link rel="stylesheet" href="CSS/main.css">
+        <link rel="stylesheet" href="CSS/debug.css">
         <title>CodeBlock Pro</title>
     </head>
     <body>
-        <div id="header"><span id="header_text">CodeBlock Pro</span></div>
-        <div id="aside"></div>
-        <div id="aside_block"><span id="aside_text">Blocks</span></div>
+        <div id="work-area"></div>
+        <div id="header">
+            <button title="Save" class="button" id="save-button" onclick="saveBlocks()"><span class="logo">
+                <img src="pictures/logos/save.svg">
+            </span></button>
+            <button title="Upload" class="button" id="upload-button" onclick="openFileDialog()"><span class="logo">
+                <img src="pictures/logos/upload.svg">
+            </span></button>
+            <button title="Run Program" class="button" id="run-button" onclick="main()"><span class="logo">
+                <img src="pictures/logos/run.svg">
+            </span></button>
+            <button title="Debug" class="button" id="debug-button" onclick="startDebug()"><span class="logo">
+                <img src="pictures/logos/debug.svg">
+            </span></button>
+            <button title="Delete All" class="button" id="del-button" onclick="deleteAllBlocks()"><span class="logo">
+                <img src="pictures/logos/delete.svg">
+            </span></button>
+            <span id="header_text"><img src="pictures/logos/logo.svg" width="92%"></span>
+        </div>
+
+        <div id="aside">
+            <div id="aside_label">Blocks</div>
+            <div id="sidebar-scroll">
+
+                <div class="block-wrapper" id="begin_code_block" data-block-type="begin">
+                    <img class="block-img" src="pictures/begin_code_block.svg" alt="Begin">
+                    <span class="block-overlay simple-label big-label">Begin</span>
+                </div>
+
+                <div class="block-wrapper" id="set_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set">
+                    <span  class="block-overlay small-label">Input</span>
+                    <input class="block-overlay base-name set-var"   type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay base-name set-eq">:=</span>
+                    <input class="block-overlay base-name set-val"   type="text" placeholder="value"    data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="get_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get">
+                    <span  class="block-overlay small-label">Print</span>
+                    <input class="block-overlay base-name get-var" type="text" placeholder="variable" data-field="varName">
+                </div>
+
+                <div class="block-wrapper" id="if_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="If">
+                    <span  class="block-overlay small-label">If</span>
+                    <input class="block-overlay base-name cyco-cond" type="text" placeholder="condition" data-field="condition">
+                </div>
+
+                <div class="block-wrapper" id="else_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="Else">
+                    <span class="block-overlay small-label">Else</span>
+                </div>
+
+                <div class="block-wrapper" id="while_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="While">
+                    <span  class="block-overlay small-label">While</span>
+                    <input class="block-overlay base-name cyco-cond" type="text" placeholder="condition" data-field="condition">
+                </div>
+
+                <div class="block-wrapper" id="for_code_block" data-block-type="cyco">
+                    <img class="block-img" src="pictures/cycle&condition_code_block.svg" alt="For">
+                    <span  class="block-overlay small-label">For</span>
+                    <input class="block-overlay base-name for-var"  type="text" placeholder="var" data-field="forVar">
+                    <input class="block-overlay base-name for-from" type="text" placeholder="0"   data-field="from">
+                    <input class="block-overlay base-name for-to"   type="text" placeholder="n"   data-field="to">
+                </div>
+
+                <div class="block-wrapper" id="createarr_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Create array">
+                    <span  class="block-overlay small-label">Create array</span>
+                    <input class="block-overlay base-name createarr-var"  type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay base-name createarr-size-label">size</span>
+                    <input class="block-overlay base-name createarr-size" type="text" placeholder="n"        data-field="size">
+                </div>
+
+                <div class="block-wrapper" id="arrlen_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get array length">
+                    <span  class="block-overlay small-label">Get array length</span>
+                    <input class="block-overlay base-name arrlen-var"   type="text" placeholder="var"   data-field="varName">
+                    <span  class="block-overlay base-name arrlen-eq">=</span>
+                    <span  class="block-overlay base-name arrlen-len">length</span>
+                    <input class="block-overlay base-name arrlen-arr"   type="text" placeholder="array" data-field="arrName">
+                </div>
+
+                <div class="block-wrapper" id="swap_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Swap">
+                    <span  class="block-overlay small-label">Swap</span>
+                    <input class="block-overlay base-name swap-arr"  type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay base-name swap-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay base-name swap-idx2" type="text" placeholder="j"     data-field="index2">
+                </div>
+
+                <div class="block-wrapper" id="arrget_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get array value">
+                    <span  class="block-overlay small-label">Get array value</span>
+                    <input class="block-overlay base-name arrget-var" type="text" placeholder="var"   data-field="varName">
+                    <span  class="block-overlay base-name arrget-eq">=</span>
+                    <input class="block-overlay base-name arrget-arr" type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay base-name arrget-idx" type="text" placeholder="i"     data-field="index">
+                </div>
+
+                <div class="block-wrapper" id="arrset_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set array value">
+                    <span  class="block-overlay small-label">Set array value</span>
+                    <input class="block-overlay base-name arrset-arr" type="text" placeholder="array" data-field="arrName">
+                    <input class="block-overlay base-name arrset-idx" type="text" placeholder="i"     data-field="index">
+                    <span  class="block-overlay base-name arrset-eq">=</span>
+                    <input class="block-overlay base-name arrset-val" type="text" placeholder="value" data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="creatematrix_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Create matrix">
+                    <span  class="block-overlay small-label">Create matrix</span>
+                    <input class="block-overlay base-name creatematrix-var"  type="text" placeholder="variable" data-field="varName">
+                    <span  class="block-overlay base-name creatematrix-n-label">N</span>
+                    <input class="block-overlay base-name creatematrix-n" type="text" placeholder="n"        data-field="rows">
+                    <span  class="block-overlay base-name creatematrix-m-label">M</span>
+                    <input class="block-overlay base-name creatematrix-m" type="text" placeholder="m"        data-field="cols">
+                </div>
+
+                <div class="block-wrapper" id="matget_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get matrix value">
+                    <span  class="block-overlay small-label">Get matrix value</span>
+                    <input class="block-overlay base-name matget-var" type="text" placeholder="var"    data-field="varName">
+                    <span  class="block-overlay base-name matget-eq">=</span>
+                    <input class="block-overlay base-name matget-mat" type="text" placeholder="matrix" data-field="matName">
+                    <input class="block-overlay base-name matget-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay base-name matget-idx2" type="text" placeholder="j"     data-field="index2">
+                </div>
+
+                <div class="block-wrapper" id="matset_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Set matrix value">
+                    <span  class="block-overlay small-label">Set matrix value</span>
+                    <input class="block-overlay base-name matset-mat" type="text" placeholder="matrix" data-field="matName">
+                    <input class="block-overlay base-name matset-idx1" type="text" placeholder="i"     data-field="index1">
+                    <input class="block-overlay base-name matset-idx2" type="text" placeholder="j"     data-field="index2">
+                    <span  class="block-overlay base-name matset-eq">=</span>
+                    <input class="block-overlay base-name matset-val" type="text" placeholder="value"  data-field="value">
+                </div>
+
+                <div class="block-wrapper" id="matlen_code_block" data-block-type="default">
+                    <img class="block-img" src="pictures/default_code_block.svg" alt="Get matrix length">
+                    <span  class="block-overlay small-label">Get matrix size</span>
+                    <input class="block-overlay base-name matlen-var"   type="text" placeholder="var"    data-field="varName">
+                    <span  class="block-overlay base-name matlen-eq">=</span>
+                    <input class="block-overlay base-name matlen-mat"   type="text" placeholder="matrix" data-field="matName">
+                    <select class="block-overlay base-name matlen-select" data-field="dimension">
+                        <option value="rows">rows (N)</option>
+                        <option value="cols">cols (M)</option>
+                    </select>
+                </div>
+
+                <div class="block-wrapper" id="cycleend_code_block" data-block-type="cycleend">
+                    <img class="block-img" src="pictures/cy-co_end_code_block.svg" alt="Cycle End">
+                    <span class="block-overlay big-label">Cycle End</span>
+                </div>
+
+                <div class="block-wrapper" id="condend_code_block" data-block-type="cycleend">
+                    <img class="block-img" src="pictures/cy-co_end_code_block.svg" alt="Condition End">
+                    <span class="block-overlay big-label">Condition End</span>
+                </div>
+
+                <div class="block-wrapper" id="end_code_block" data-block-type="end">
+                    <img class="block-img" src="pictures/end_code_block.svg" alt="End">
+                    <span class="block-overlay end-label">End</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="console-wrapper">
+            <div id="console-tab" onclick="toggleConsole()">
+                <div id="console-chevron"></div>
+            </div>
+            <div id="console-body"></div>
+        </div>
+
+        <div id="zoom-controls">
+            <button id="zoom-reset" onclick="resetZoom()">Reset 100%</button>
+            <span id="zoom-percentage">100%</span>
+        </div>
+
+        <script src="JS/interpretator.js"></script>
+        <script src="JS/script.js"></script>
+        <script src="JS/save-load.js"></script>
+        <script src="JS/debug.js"></script>
     </body>
 </html>
